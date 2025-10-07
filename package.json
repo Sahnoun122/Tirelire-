@@ -1,0 +1,44 @@
+{
+  "name": "tirelire",
+  "version": "1.0.0",
+  "description": "Cette API gère l’inscription des utilisateurs, la création de groupes, les tours de contribution, la distribution des fonds et le suivi des paiements.  \r Elle intègre également un **score de fiabilité interne** qui valorise la régularité et la ponctualité des membres.  \r Ce score influence l’ordre de passage ou l’accès à certains groupes plus sélectifs.",
+  "main": "index.js",
+  "scripts": {
+  "start": "node src/server.js",
+  "dev": "nodemon src/server.js",
+  "test": "jest"
+}
+,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sahnoun122/Tirelire-.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sahnoun122/Tirelire-/issues"
+  },
+  "homepage": "https://github.com/Sahnoun122/Tirelire-#readme",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "express-validator": "^7.2.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.19.1",
+    "morgan": "^1.10.1",
+    "multer": "^2.0.2",
+    "nodemailer": "^7.0.9",
+    "validator": "^13.15.15",
+    "winston": "^3.18.3"
+  },
+  "devDependencies": {
+    "eslint": "^9.37.0",
+    "jest": "^30.2.0",
+    "nodemon": "^3.1.10",
+    "supertest": "^7.1.4"
+  }
+}
