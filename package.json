@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Cette API gère l’inscription des utilisateurs, la création de groupes, les tours de contribution, la distribution des fonds et le suivi des paiements.  \r Elle intègre également un **score de fiabilité interne** qui valorise la régularité et la ponctualité des membres.  \r Ce score influence l’ordre de passage ou l’accès à certains groupes plus sélectifs.",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
