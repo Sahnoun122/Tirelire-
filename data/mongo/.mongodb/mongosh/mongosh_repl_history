@@ -1,0 +1,33 @@
+db.users.find()
+])
+  }
+    createdAt: new Date()
+    reliability_score: 100,
+    role: "admin",
+    password: "hashed_admin_pass",
+    email: "admin@tirelire.com",
+    lastName: "Tirelire",
+    firstName: "Admin",
+  {
+  },
+    createdAt: new Date()
+    reliability_score: 90,
+    selfie_url: "uploads/selfie.jpg",
+    photo_id_url: "uploads/cin.jpg",
+    kyc_status: "verified",
+    national_id: "AA123456",
+    role: "particulier",
+    password: "hashed_password",
+    email: "khadija@example.com",
+    lastName: "Sahnoun",
+    firstName: "Khadija",
+  {
+db.users.insertMany([
+show collections
+use api-contribution 
+db.createCollection("users")
+use api-contribution 
+db.createCollection("users")
+db.createCollections("users")
+show collections
+use api-contribution 
