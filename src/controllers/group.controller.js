@@ -26,3 +26,23 @@ export const createGroup = async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 };
+
+export const getGroup = async(req , res )=>{
+
+
+    try {
+        const {id }= req.params;
+    const group = await Group.findById(id)
+      .populate("creator", "firstName lastName email")
+      .populate("members.user", "firstName lastName email reliability_score");
+
+      if(!group)
+        return res.status(404).json({message : "groups not fond "});
+    return res.json({ group});
+
+        
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ message : error.message })
+    }
+}

@@ -28,7 +28,7 @@ const GroupShem = new mongoose.Schema({
     name : {type : String , required : true},
     description : {type : String},
     creator : {type : mongoose.Schema.Types.ObjectId , ref : "User" , required : true},
-    memebers : [MemberShema],
+  members: [MemberShema],   
     contributionAmount : {type : Number , required : true },
     frequency : {type : String , enum :["weekly","monthly","yearly"] , default : "monthly"},
     currentRound : {type : Number , default : 0},
