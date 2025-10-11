@@ -115,3 +115,55 @@ export const leaveGroup  = async (req , res )=>{
         return res.status(500).json({message : error.message})
     }
 }
+export const startRound = async (req, res) => {
+  try {
+    const { id } = req.params; // group id
+    const userId = req.user.id;
+
+    const group = await Group.findById(id);
+    if (!group) return res.status(404).json({ message: "Group not found" });
+
+    if (group.creator.toString() !== userId && req.user.role !== "admin") {
+      return res.status(403).json({ message: "Only creator or admin can start round" });
+    }
+
+    const nextRoundNum = group.currentRound + 1;
+    if (group.maxRounds && nextRoundNum > group.maxRounds) {
+      return res.status(400).json({ message: "Max rounds reached" });
+    }
+
+    if (group.members.length === 0) return res.status(400).json({ message: "No members" });
+
+    // compute beneficiary: order by reliability_score desc
+    const membersWithScore = await Promise.all(
+      group.members.map(async m => {
+        const u = await User.findById(m.user).select("reliability_score");
+        return { member: m, score: u?.reliability_score ?? 0, joinedAt: m.joinedAt };
+      })
+    );
+
+    membersWithScore.sort((a,b) => {
+      if (b.score !== a.score) return b.score - a.score;
+      return new Date(a.joinedAt) - new Date(b.joinedAt);
+    });
+
+    const beneficiary = membersWithScore[(nextRoundNum - 1) % membersWithScore.length].member.user;
+
+    const round = {
+      roundNumber: nextRoundNum,
+      beneficiary,
+      status: "active",
+      startDate: new Date(),
+      totalCollected: 0
+    };
+
+    group.rounds.push(round);
+    group.currentRound = nextRoundNum;
+    await group.save();
+
+    return res.json({ message: "Round started", round });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: err.message });
+  }
+};
