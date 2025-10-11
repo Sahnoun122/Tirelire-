@@ -46,3 +46,24 @@ export const getGroup = async(req , res )=>{
         return res.status(500).json({ message : error.message })
     }
 }
+
+
+export const listGroups = async (req, res) => {
+  try {
+    const { page = 1, limit = 20, search } = req.query;
+    const filter = {};
+    if (search) filter.name = { $regex: search, $options: "i" };
+
+    const groups = await Group.find(filter)
+      .skip((page - 1) * limit)
+      .limit(Number(limit))
+      .sort({ createdAt: -1 })
+      .select("name description contributionAmount members.length isOpen");
+
+    const total = await Group.countDocuments(filter);
+    return res.json({ data: groups, total, page: Number(page), limit: Number(limit) });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: err.message });
+  }
+};
