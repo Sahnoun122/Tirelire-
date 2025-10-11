@@ -67,3 +67,25 @@ export const listGroups = async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 };
+
+
+export const joinGroup = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.id;
+
+    const group = await Group.findById(id);
+    if (!group) return res.status(404).json({ message: "Group not found" });
+    if (!group.isOpen) return res.status(403).json({ message: "Group closed" });
+
+    const already = group.members.find(m => m.user.toString() === userId);
+    if (already) return res.status(400).json({ message: "Already a member" });
+
+  group.members.push({ user: new mongoose.Types.ObjectId(userId), status: "active", joinedAt: new Date() });
+    await group.save();
+    return res.json({ message: "Joined group", group });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: err.message });
+  }
+};
