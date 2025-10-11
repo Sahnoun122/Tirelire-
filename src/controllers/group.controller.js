@@ -89,3 +89,29 @@ export const joinGroup = async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 };
+
+
+export const leaveGroup  = async (req , res )=>{
+    try {
+
+        const {id }= req.params;
+        const userId = req.user.id;
+
+        const group = await Group.findById(id)
+        if(!group)
+            return res.status(400).json({message : "group not found"});
+
+        const idx = group.members.findIndex(m=> m.user.toString() === userId);
+        if(idx === -1)
+            return res.status(400).json({message : "not a member "})
+
+        group.members.splice(idx , 1);
+         await group.save();
+        
+         return res.status(200).json({message : "left group" , group})
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({message : error.message})
+    }
+}
