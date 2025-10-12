@@ -214,3 +214,40 @@ export const contribute  = async (req , res )=>{
     return res.status(500).json({message : error.message})
   }
 }
+
+
+export const getHistory = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const group = await Group.findById(id).populate("rounds.beneficiary", "firstName lastName email");
+    if (!group) return res.status(404).json({ message: "Group not found" });
+    return res.json({ rounds: group.rounds });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: err.message });
+  }
+};
+
+
+export const updateGroup = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const data = req.body;
+
+    const group = await Group.findById(id);
+    if (!group) return res.status(404).json({ message: "Group not found" });
+
+    if (group.creator.toString() !== req.user.id && req.user.role !== "admin") {
+      return res.status(403).json({ message: "Forbidden" });
+    }
+
+    const allowed = ["name","description","contributionAmount","frequency","isOpen","maxRounds"];
+    allowed.forEach(k => { if (k in data) group[k] = data[k]; });
+
+    await group.save();
+    return res.json({ message: "Group updated", group });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: err.message });
+  }
+};
