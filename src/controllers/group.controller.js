@@ -117,7 +117,7 @@ export const leaveGroup  = async (req , res )=>{
 }
 export const startRound = async (req, res) => {
   try {
-    const { id } = req.params; // group id
+    const { id } = req.params; 
     const userId = req.user.id;
 
     const group = await Group.findById(id);
@@ -134,7 +134,6 @@ export const startRound = async (req, res) => {
 
     if (group.members.length === 0) return res.status(400).json({ message: "No members" });
 
-    // compute beneficiary: order by reliability_score desc
     const membersWithScore = await Promise.all(
       group.members.map(async m => {
         const u = await User.findById(m.user).select("reliability_score");
@@ -167,3 +166,51 @@ export const startRound = async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 };
+
+
+export const contribute  = async (req , res )=>{
+  try {
+    
+    const {id} = req.params;
+    const userId = req.user.id;
+    const {amount} = req.body;
+
+    const group = await Group.findById(id);
+    if(!group){
+     return res.status(404).json({message : "group not found"});
+    };
+
+ if(Number(amount)!== group.contributionAmount){
+  return res.status(400).json({message : "Contribution amount mismatch"})
+ };
+
+
+ const currentRound  = group.rounds.find(r=> r.status === "active");
+ if(!currentRound){
+  return res.status(400).json({message : "No active round"});
+ }
+
+   const already  = (currentRound.contributions || []).find(u=> u.user.toString() === userId );
+  if(already){
+    return res.status(400).json({message : "Already contributed this round"});
+  }
+
+  currentRound.totalCollected += Number(amount);
+  currentRound.contributions = currentRound.contributions || [];
+  currentRound.contributions.push({  user :new mongoose.Types.ObjectId(userId) , amount : Number(amount) , date : new Date()});
+
+  const expectedTotal = group.members.length * group.contributionAmount;
+  if(currentRound.totalCollected>= expectedTotal){
+    currentRound.status = "completed"
+    currentRound.endDate = new Date();
+  }
+
+  await group.save();
+
+  return res.json({message : "Contribution recorded" , round : currentRound});
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({message : error.message})
+  }
+}
