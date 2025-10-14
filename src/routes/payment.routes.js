@@ -1,15 +1,14 @@
-import express from 'express';
+import express from "express";
 import {
   createStripePayment,
   createCashPayment,
-  handleStripeWebhook,
-} from '../controllers/payment.controller.js';
+  validateCashPayment,
+} from "../controllers/payment.controller.js";
 
 const router = express.Router();
 
-router.post('/stripe', createStripePayment);
-router.post('/cash', createCashPayment);
-
-router.post('/webhook', express.raw({ type: 'application/json' }), handleStripeWebhook);
+router.post("/stripe", createStripePayment);
+router.post("/cash", createCashPayment);
+router.put("/cash/validate/:paymentId", validateCashPayment);
 
 export default router;
