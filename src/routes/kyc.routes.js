@@ -1,16 +1,27 @@
 import express from "express";
-import upload from "../middleware/upload.middleware";
-import  { createKyc } from "../controllers/kyc.controller.js";
-
+import multer from "multer";
+import { createKyc } from "../controllers/kyc.controller.js";
 
 const router = express.Router();
-router.post('/create',
-    upload.fields([
-        {name : "cardImage" , maxCount : 1},
-        { name : "faceImage" , maxCount : 1},
-    ]),
 
-    createKyc
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+
+const upload = multer({ storage });
+
+router.post(
+  "/create",
+  upload.fields([
+    { name: "cardImage", maxCount: 1 },
+    { name: "faceImage", maxCount: 1 },
+  ]),
+  createKyc
 );
 
 export default router;

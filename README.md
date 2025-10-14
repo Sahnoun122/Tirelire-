@@ -111,12 +111,7 @@ Le projet suit une **architecture modulaire** basée sur la séparation des resp
 │ │ ├─ payment.controller.js
 │ │ └─ kyc.controller.js
 │ │
-│ ├─ services/ # 🧠 Services métiers (réutilisables)
-│ │ ├─ score.service.js # Gestion du score de fiabilité
-│ │ ├─ notification.service.js
-│ │ ├─ kyc.service.js
-│ │ └─ mail.service.js
-│ │
+│ 
 │ ├─ routes/ # 🛣️ Routes Express
 │ │ ├─ auth.routes.js
 │ │ ├─ group.routes.js
