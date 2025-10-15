@@ -16,7 +16,6 @@ connectDB();
 
 const app = express();
 
-// Webhook route DOIT être avant express.json() pour recevoir les données brutes
 app.use("/api/webhook", webhookRoutes);
 
 app.use(express.json());
