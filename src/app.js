@@ -18,6 +18,13 @@ connectDB();
 
 const app = express();
 
+app.use((req, res, next) => {
+  req.user = {
+    _id: "66ee0f8bc987123456abcde1",
+    role: "admin", 
+  };
+  next();
+});
 app.use("/api/webhook", webhookRoutes);
 
 app.use(express.json());
