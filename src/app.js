@@ -8,7 +8,7 @@ import kycRoutes from "./routes/kyc.routes.js";
 import paymentRoutes from './routes/payment.routes.js';
 import webhookRoutes from "./routes/stripeWebhook.routes.js";
 
-import "./services/notification.service.js";
+import notificationRoutes from "./routes/notification.routes.js";
 
 import morgan from "morgan";
 
@@ -27,6 +27,7 @@ app.use("/api/groups" , groupRoutes);
 app.use("/api/kyc" , kycRoutes);
 
 app.use("/api/payments", paymentRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 
 app.use("/api/contribution" , contributionRoutes);
