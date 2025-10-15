@@ -9,6 +9,7 @@ import paymentRoutes from './routes/payment.routes.js';
 import webhookRoutes from "./routes/stripeWebhook.routes.js";
 
 import notificationRoutes from "./routes/notification.routes.js";
+import adminRoutes from "./routes/admin.routes.js";
 
 import morgan from "morgan";
 
@@ -28,6 +29,7 @@ app.use("/api/kyc" , kycRoutes);
 
 app.use("/api/payments", paymentRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use("/api/admin", adminRoutes);
 
 
 app.use("/api/contribution" , contributionRoutes);

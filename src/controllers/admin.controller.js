@@ -1,5 +1,6 @@
 import User from "../models/user.model.js";
 import Group from "../models/group.model.js";
+import Contribution from "../models/contribution.model.js";
 
 export const getAllGroups = async (req, res) => {
   try {
