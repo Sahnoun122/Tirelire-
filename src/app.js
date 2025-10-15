@@ -6,8 +6,9 @@ import groupRoutes from "./routes/group.routes.js"
 import contributionRoutes from "./routes/contribution.routes.js";
 import kycRoutes from "./routes/kyc.routes.js";
 import paymentRoutes from './routes/payment.routes.js';
-
 import webhookRoutes from "./routes/stripeWebhook.routes.js";
+
+import "./services/notification.service.js";
 
 import morgan from "morgan";
 

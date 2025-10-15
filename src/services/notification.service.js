@@ -1,46 +1,47 @@
-import cron from "node-cron";
 import nodemailer from "nodemailer";
-import Contribution from "../models/contribution.model.js";
-import User from "../models/user.model.js";
+import cron from "node-cron";
+import dotenv from "dotenv";
 
-const transporter = nodemailer.createTransport({
+dotenv.config();
+
+export const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: process.env.EMAIL_USER, 
-    pass: process.env.EMAIL_PASS, 
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
   },
 });
 
-const sendReminderEmail = async (user, missedCount) => {
+export const sendNotificationEmail = async (to, subject, message) => {
   const mailOptions = {
     from: `"Tirelire" <${process.env.EMAIL_USER}>`,
-    to: user.email,
-    subject: "Rappel de contribution manquée",
-    text: `Salut ${user.firstName}, 
-Tu as oublié de faire ${missedCount} contribution(s). Pense à régulariser ta participation. 😊`,
+    to,
+    subject,
+    text: message,
   };
 
   await transporter.sendMail(mailOptions);
-  console.log(`Email de rappel envoyé à ${user.email}`);
+  console.log(`📧 Email envoyé à ${to}`);
 };
 
-cron.schedule("0 9 * * *", async () => {
-  console.log("Vérification des contributions en retard...");
+export const sendTestEmail = async (email) => {
+  await sendNotificationEmail(
+    email,
+    " Test Notification Tirelire",
+    "Ceci est un test de notification depuis Tirelire "
+  );
+};
 
-  const today = new Date();
-  const users = await User.find();
-
-  for (const user of users) {
-    const missedContributions = await Contribution.find({
-      user: user._id,
-      dueDate: { $lt: today },
-      status: "pending",
-    });
-
-    if (missedContributions.length > 0) {
-      await sendReminderEmail(user, missedContributions.length);
-    }
+cron.schedule("* * * * *", async () => {
+  try {
+    const email = process.env.EMAIL_USER; 
+    await sendNotificationEmail(
+      email,
+      "⏰ Rappel automatique Tirelire",
+      "N'oublie pas ta contribution d'aujourd'hui 💰"
+    );
+    console.log("Notification automatique envoyée !");
+  } catch (error) {
+    console.error("Erreur notification automatique:", error.message);
   }
-
-  console.log("Vérification terminée.");
 });
