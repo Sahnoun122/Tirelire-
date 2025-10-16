@@ -8,7 +8,7 @@ export const getAllGroups = async (req, res) => {
       .populate("rounds.beneficiary", "firstName lastName email"); 
 
     res.status(200).json({
-      message: "📋 Liste complète des groupes",
+      message: " Liste complète des groupes",
       total: groups.length,
       groups,
     });
@@ -35,7 +35,7 @@ export const sendMessageToUser = async (req, res) => {
     await user.save();
 
     res.status(200).json({
-      message: "💬 Message envoyé avec succès à l'utilisateur",
+      message: " Message envoyé avec succès à l'utilisateur",
       to: user.email,
     });
   } catch (error) {

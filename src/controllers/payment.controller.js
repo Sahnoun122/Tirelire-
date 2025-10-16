@@ -24,7 +24,7 @@ export const createStripePayment = async (req, res) => {
 
     res.status(200).json({
       clientSecret: paymentIntent.client_secret,
-      message: "✅ Paiement Stripe créé avec succès.",
+      message: "Paiement Stripe créé avec succès.",
     });
   } catch (error) {
     console.error("Erreur Stripe:", error.message);
@@ -47,7 +47,7 @@ export const createCashPayment = async (req, res) => {
     await payment.save();
 
     res.status(201).json({
-      message: "💵 Paiement en espèces enregistré (en attente de validation).",
+      message: "Paiement en espèces enregistré (en attente de validation).",
       payment,
     });
   } catch (error) {
@@ -68,7 +68,7 @@ export const validateCashPayment = async (req, res) => {
 
     await updateReliabilityScore(payment.user, "succeeded");
 
-    res.json({ message: "✅ Paiement validé avec succès", payment });
+    res.json({ message: " Paiement validé avec succès", payment });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
