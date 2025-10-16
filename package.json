@@ -1,13 +1,13 @@
 {
   "name": "tirelire",
   "version": "1.0.0",
-  "description": "Cette API gère l’inscription des utilisateurs, la création de groupes, les tours de contribution, la distribution des fonds et le suivi des paiements.  \r Elle intègre également un **score de fiabilité interne** qui valorise la régularité et la ponctualité des membres.  \r Ce score influence l’ordre de passage ou l’accès à certains groupes plus sélectifs.",
+  "description": "Cette API gère l’inscription des utilisateurs, la création de groupes, les tours de contribution, la distribution des fonds et le suivi des paiements. Elle intègre également un score de fiabilité interne qui valorise la régularité et la ponctualité des membres. Ce score influence l’ordre de passage ou l’accès à certains groupes plus sélectifs.",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "test": "jest"
+  "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand"
   },
   "repository": {
     "type": "git",
@@ -48,6 +48,7 @@
   "devDependencies": {
     "eslint": "^9.37.0",
     "jest": "^30.2.0",
+    "mongodb-memory-server": "^10.2.3",
     "nodemon": "^3.1.10",
     "supertest": "^7.1.4"
   }
