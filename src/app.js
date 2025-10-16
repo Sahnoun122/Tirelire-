@@ -10,6 +10,7 @@ import webhookRoutes from "./routes/stripeWebhook.routes.js";
 
 import notificationRoutes from "./routes/notification.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
+import communicationRoutes from "./routes/communication.routes.js";
 
 import morgan from "morgan";
 
@@ -37,6 +38,7 @@ app.use("/api/kyc" , kycRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/communication", communicationRoutes);
 
 
 app.use("/api/contribution" , contributionRoutes);
