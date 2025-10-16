@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "../app.js"; // <<-- Hna daba kayimport app sah
+import app from "../app.js"; 
 
 describe("Auth API", () => {
   it("should register a new user", async () => {
