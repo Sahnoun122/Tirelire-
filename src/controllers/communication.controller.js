@@ -1,84 +1,57 @@
 import Message from "../models/message.model.js";
 import Group from "../models/group.model.js";
-import TransactionLog from "../models/transactionLog.model.js";
 
 export const sendMessage = async (req, res) => {
   try {
-    const { groupId, type, content } = req.body;
-    const senderId = req.user.id;
+    if (!req.body) {
+      return res.status(400).json({ message: "Body vide" });
+    }
 
-    const group = await Group.findById(groupId);
+    const { content, type } = req.body;
+    const sender = req.user.id;
+
+    const group = await Group.findById(req.params.groupId);
     if (!group) return res.status(404).json({ message: "Groupe introuvable" });
 
-    const newMessage = await Message.create({
-      group: groupId,
-      sender: senderId,
-      type,
+    if (!group.members.some(m => m.user.toString() === sender)) {
+      return res.status(403).json({ message: "Tu ne fais pas partie de ce groupe" });
+    }
+
+    const newMessage = new Message({
+      group: group._id,
+      sender,
       content,
+      type: type || "text",
+      timestamp: new Date(),
     });
 
-    res.status(201).json({
-      message: "💬 Message envoyé avec succès",
+    await newMessage.save();
+
+    return res.status(201).json({
+      message: "Message envoyé avec succès",
       data: newMessage,
     });
   } catch (error) {
-    res.status(500).json({ message: "Erreur lors de l’envoi du message", error });
+    console.error("Erreur lors de l’envoi du message :", error);
+    return res.status(500).json({ message: "Erreur lors de l’envoi du message", error });
   }
 };
 
 export const getGroupMessages = async (req, res) => {
   try {
     const { groupId } = req.params;
-
     const messages = await Message.find({ group: groupId })
-      .populate("sender", "firstName lastName email")
-      .sort({ sentAt: 1 });
+      .populate("sender", "name email")
+      .sort({ timestamp: 1 });
 
-    res.status(200).json({
-      message: "📜 Historique des messages",
-      total: messages.length,
-      messages,
+    return res.status(200).json({
+      message: "Messages récupérés avec succès",
+      data: messages,
     });
   } catch (error) {
-    res.status(500).json({ message: "Erreur de récupération des messages", error });
-  }
-};
-
-export const logTransaction = async (req, res) => {
-  try {
-    const { userId, groupId, type, amount, description } = req.body;
-
-    const log = await TransactionLog.create({
-      user: userId,
-      group: groupId,
-      type,
-      amount,
-      description,
-    });
-
-    res.status(201).json({
-      message: "💰 Opération enregistrée avec succès",
-      log,
-    });
-  } catch (error) {
-    res.status(500).json({ message: "Erreur de journalisation", error });
-  }
-};
-
-export const getGroupTransactions = async (req, res) => {
-  try {
-    const { groupId } = req.params;
-
-    const logs = await TransactionLog.find({ group: groupId })
-      .populate("user", "firstName lastName email")
-      .sort({ date: -1 });
-
-    res.status(200).json({
-      message: "📊 Historique des transactions du groupe",
-      total: logs.length,
-      logs,
-    });
-  } catch (error) {
-    res.status(500).json({ message: "Erreur de récupération des transactions", error });
+    console.error("Erreur lors de la récupération des messages :", error);
+    return res
+      .status(500)
+      .json({ message: "Erreur lors de la récupération des messages", error });
   }
 };
