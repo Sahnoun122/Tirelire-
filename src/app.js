@@ -2,15 +2,51 @@ import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/auth.routes.js";
+import groupRoutes from "./routes/group.routes.js"
+import contributionRoutes from "./routes/contribution.routes.js";
+import kycRoutes from "./routes/kyc.routes.js";
+import paymentRoutes from './routes/payment.routes.js';
+import webhookRoutes from "./routes/stripeWebhook.routes.js";
+
+import notificationRoutes from "./routes/notification.routes.js";
+import adminRoutes from "./routes/admin.routes.js";
+import communicationRoutes from "./routes/communication.routes.js";
+
 import morgan from "morgan";
 
 dotenv.config();
 connectDB();
 
 const app = express();
+
+app.use((req, res, next) => {
+  req.user = {
+    _id: "66ee0f8bc987123456abcde1",
+    role: "admin", 
+  };
+  next();
+});
+app.use("/api/webhook", webhookRoutes);
+
 app.use(express.json());
 app.use(morgan("dev"));
 
 app.use("/api/auth", authRoutes);
+app.use("/api/groups" , groupRoutes);
+app.use("/api/kyc" , kycRoutes);
+
+app.use("/api/payments", paymentRoutes);
+app.use("/api/notifications", notificationRoutes);
+app.use("/api/admin", adminRoutes);
+app.use("/api/communication", communicationRoutes);
+
+
+app.use("/api/contribution" , contributionRoutes);
+
 
 export default app;
+
+if (process.env.NODE_ENV !== "test") {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+}

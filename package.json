@@ -1,13 +1,13 @@
 {
   "name": "tirelire",
   "version": "1.0.0",
-  "description": "Cette API gère l’inscription des utilisateurs, la création de groupes, les tours de contribution, la distribution des fonds et le suivi des paiements.  \r Elle intègre également un **score de fiabilité interne** qui valorise la régularité et la ponctualité des membres.  \r Ce score influence l’ordre de passage ou l’accès à certains groupes plus sélectifs.",
+  "description": "Cette API gère l’inscription des utilisateurs, la création de groupes, les tours de contribution, la distribution des fonds et le suivi des paiements. Elle intègre également un score de fiabilité interne qui valorise la régularité et la ponctualité des membres. Ce score influence l’ordre de passage ou l’accès à certains groupes plus sélectifs.",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "test": "jest"
+  "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand"
   },
   "repository": {
     "type": "git",
@@ -21,7 +21,9 @@
   },
   "homepage": "https://github.com/Sahnoun122/Tirelire-#readme",
   "dependencies": {
+    "@tensorflow/tfjs": "^4.22.0",
     "bcryptjs": "^3.0.2",
+    "canvas": "^3.2.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
@@ -29,12 +31,16 @@
     "express": "^5.1.0",
     "express-rate-limit": "^8.1.0",
     "express-validator": "^7.2.1",
+    "face-api.js": "^0.22.2",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.19.1",
+    "mongodb": "^6.9.0",
+    "mongoose": "^8.5.0",
     "morgan": "^1.10.1",
     "multer": "^2.0.2",
+    "node-cron": "^4.2.1",
     "nodemailer": "^7.0.9",
+    "stripe": "^19.1.0",
     "uuid": "^13.0.0",
     "validator": "^13.15.15",
     "winston": "^3.18.3"
@@ -42,6 +48,7 @@
   "devDependencies": {
     "eslint": "^9.37.0",
     "jest": "^30.2.0",
+    "mongodb-memory-server": "^10.2.3",
     "nodemon": "^3.1.10",
     "supertest": "^7.1.4"
   }

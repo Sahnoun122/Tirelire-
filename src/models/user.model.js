@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
   role: { type: String, enum: ["particulier", "admin"], default: "particulier" },
   national_id: { type: String },
   kyc_status: { type: String, enum: ["pending", "verified", "rejected"], default: "pending" },
-  reliability_score: { type: Number, default: 100 },
+  reliability_score: { type: Number, default: 100 }, 
   createdAt: { type: Date, default: Date.now }
 });
 
